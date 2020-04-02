@@ -28,7 +28,7 @@
             </call>
             <call method="setTemplate">
                 <argument>edit</argument>
-                <argument>LexikMailerBundle:Admin:base_edit.html.twig</argument>
+                <argument>LexikMailerBundle/Admin/base_edit.html.twig</argument>
             </call>
         </service>
         <service id="lexik_mailer.admin.layout_translation" class="%lexik_mailer.admin.layout_translation.class%">
@@ -41,7 +41,7 @@
             </call>
             <call method="setTemplate">
                 <argument>edit</argument>
-                <argument>LexikMailerBundle:Admin:base_edit.html.twig</argument>
+                <argument>LexikMailerBundle/Admin/base_edit.html.twig</argument>
             </call>
         </service>
         <!-- EMAIL ADMIN -->
@@ -61,7 +61,7 @@
             </call>
             <call method="setTemplate">
                 <argument>edit</argument>
-                <argument>LexikMailerBundle:Admin:base_edit.html.twig</argument>
+                <argument>LexikMailerBundle/Admin/base_edit.html.twig</argument>
             </call>
         </service>
         <service id="lexik_mailer.admin.email_translation" class="%lexik_mailer.admin.email_translation.class%">
@@ -74,7 +74,7 @@
             </call>
             <call method="setTemplate">
                 <argument>edit</argument>
-                <argument>LexikMailerBundle:Admin:base_edit.html.twig</argument>
+                <argument>LexikMailerBundle/Admin/base_edit.html.twig</argument>
             </call>
         </service>
     </services>

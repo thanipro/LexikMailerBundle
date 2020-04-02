@@ -25,7 +25,7 @@ class LayoutController extends Controller
             $request->get('page', 1)
         );
 
-        return $this->render('LexikMailerBundle:Layout:list.html.twig', array_merge(array(
+        return $this->render('@LexikMailer/Layout/list.html.twig', array_merge(array(
             'layouts' => $pager->getResults(),
             'total'   => $pager->getCount(),
             'page'    => $pager->getPage(),
@@ -46,7 +46,7 @@ class LayoutController extends Controller
      */
     public function editAction(Request $request, $layoutId, $lang = null)
     {
-        $layout= $this->get('doctrine.orm.entity_manager')->find('LexikMailerBundle:Layout', $layoutId);
+        $layout = $this->get('doctrine.orm.entity_manager')->find('LexikMailerBundle:Layout', $layoutId);
 
         if (!$layout) {
             throw $this->createNotFoundException(sprintf('No layout found for id "%d".', $layoutId));
@@ -62,7 +62,7 @@ class LayoutController extends Controller
             )));
         }
 
-        return $this->render('LexikMailerBundle:Layout:edit.html.twig', array_merge(array(
+        return $this->render('@LexikMailer/Layout/edit.html.twig', array_merge(array(
             'form'          => $form->createView(),
             'base_layout'   => $this->container->getParameter('lexik_mailer.base_layout'),
             'layout'        => $layout,
@@ -110,7 +110,7 @@ class LayoutController extends Controller
             return $this->redirect($this->generateUrl('lexik_mailer.layout_list'));
         }
 
-        return $this->render('LexikMailerBundle:Layout:new.html.twig', array_merge(array(
+        return $this->render('@LexikMailer/Layout/new.html.twig', array_merge(array(
             'form'   => $form->createView(),
             'layout' => $this->container->getParameter('lexik_mailer.base_layout'),
             'lang'   => \Locale::getDisplayLanguage($this->container->getParameter('locale')),
