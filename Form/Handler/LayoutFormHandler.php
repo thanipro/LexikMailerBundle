@@ -62,7 +62,7 @@ class LayoutFormHandler implements FormHandlerInterface
     public function createForm($layout = null, $lang = null)
     {
         $edit = ($layout !== null);
-        $this->locale = $lang ? : $this->defaultLocale;
+        $this->locale = $lang ?: $this->defaultLocale;
 
         if ($edit) {
             $translation = $layout->getTranslation($this->locale);
@@ -88,7 +88,7 @@ class LayoutFormHandler implements FormHandlerInterface
         $valid = false;
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $model = $form->getData();
             $model->getEntity()->addTranslation($model->getTranslation());
 
