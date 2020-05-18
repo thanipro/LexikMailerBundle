@@ -126,6 +126,7 @@
             <argument type="service" id="form.factory" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument>%locale%</argument>
+            <argument>%lexik_mailer.supported_locales%</argument>
         </service>
 
         <service id="lexik_mailer.form.handler.layout" class="%lexik_mailer.form.handler.layout.class%">

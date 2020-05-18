@@ -10,6 +10,8 @@ use Lexik\Bundle\MailerBundle\Form\Type\EmailType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Exception\MissingResourceException;
+use Symfony\Component\Intl\Languages;
 
 /**
  * @author Cédric Girard <c.girard@lexik.fr>
@@ -35,17 +37,20 @@ class EmailFormHandler implements FormHandlerInterface
      * @var string
      */
     private $locale;
+    private $supportedLocales;
 
     /**
      * @param FormFactoryInterface $factory
-     * @param EntityManager        $em
-     * @param string               $defaultLocale
+     * @param EntityManager $em
+     * @param string $defaultLocale
+     * @param $supportedLocales
      */
-    public function __construct(FormFactoryInterface $factory, EntityManager $em, $defaultLocale)
+    public function __construct(FormFactoryInterface $factory, EntityManager $em, $defaultLocale, $supportedLocales)
     {
-        $this->factory = $factory;
-        $this->em = $em;
-        $this->defaultLocale = $defaultLocale;
+        $this->factory          = $factory;
+        $this->em               = $em;
+        $this->defaultLocale    = $defaultLocale;
+        $this->supportedLocales = $supportedLocales;
     }
 
     /**
@@ -61,23 +66,49 @@ class EmailFormHandler implements FormHandlerInterface
      */
     public function createForm($email = null, $lang = null)
     {
-        $edit = ($email !== null);
-        $this->locale = $lang ? : $this->defaultLocale;
+        $edit         = ($email !== null);
+        $this->locale = $lang ?: $this->defaultLocale;
 
         if ($edit) {
             $translation = $email->getTranslation($this->locale);
         } else {
-            $email = new Email();
+            $email       = new Email();
             $translation = new EmailTranslation($this->defaultLocale);
             $translation->setEmail($email);
         }
 
         $model = new EntityTranslationModel($email, $translation);
 
-        return $this->factory->create(EmailType::class, $model, array(
-            'data_translation' => $translation,
-            'edit'             => $edit,
-        ));
+        $supportedLocaleChoices = $this->getSupportedLocaleChoices();
+        if (null !== $lang and !in_array($lang, $supportedLocaleChoices)) {
+            throw new \Exception(sprintf(
+                'Unsupported language: %s. Please check your LexikMailerBundle configuration.',
+                $lang
+            ));
+        }
+
+        return $this->factory->create(EmailType::class, $model, [
+            'data_translation'  => $translation,
+            'edit'              => $edit,
+            'supported_locales' => $supportedLocaleChoices
+        ]);
+    }
+
+    private function getSupportedLocaleChoices()
+    {
+        $choices = [];
+        foreach (preg_split('/[ ,]/', $this->supportedLocales, -1, PREG_SPLIT_NO_EMPTY) as $locale) {
+            $alpha2 = substr($locale, 0, 2);
+            try {
+                $name = Languages::getName($alpha2);
+            } catch (MissingResourceException $e) {
+                $name = '- unsupported -';
+            }
+            $label           = sprintf('%s [%s]', $name, $locale);
+            $choices[$label] = $locale;
+        }
+
+        return $choices;
     }
 
     /**

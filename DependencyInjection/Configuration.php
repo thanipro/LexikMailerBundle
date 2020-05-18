@@ -27,6 +27,10 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                 ->end()
 
+                ->scalarNode('supported_locales')
+                    ->defaultValue('de en es')
+                ->end()
+
                 ->scalarNode('base_layout')
                     ->cannotBeEmpty()
                     ->defaultValue('LexikMailerBundle::layout.html.twig')

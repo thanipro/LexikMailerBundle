@@ -322,6 +322,6 @@ class EmailTranslation
      */
     public function displayLanguage()
     {
-        return \Locale::getDisplayLanguage($this->getLang());
+        return \Locale::getDisplayLanguage($this->getLang()) . ' [' . $this->getLang() . ']';
     }
 }

@@ -34,6 +34,7 @@ class LexikMailerExtension extends Extension
         $container->setParameter('lexik_mailer.list_items_per_page', $config['list_items_per_page']);
         $container->setParameter('lexik_mailer.admin_email', $config['admin_email']);
         $container->setParameter('lexik_mailer.allowed_headers', $config['allowed_headers']);
+        $container->setParameter('lexik_mailer.supported_locales', $config['supported_locales']);
 
         foreach ($config['classes'] as $name => $class) {
             $container->setParameter(sprintf('lexik_mailer.%s.class', $name), $class);
