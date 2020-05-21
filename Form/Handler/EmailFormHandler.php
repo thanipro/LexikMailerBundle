@@ -80,7 +80,7 @@ class EmailFormHandler implements FormHandlerInterface
         $model = new EntityTranslationModel($email, $translation);
 
         $supportedLocaleChoices = $this->getSupportedLocaleChoices();
-        if (null !== $lang and !in_array($lang, $supportedLocaleChoices)) {
+        if (!empty($lang) and !in_array($lang, $supportedLocaleChoices)) {
             throw new \Exception(sprintf(
                 'Unsupported language: %s. Please check your LexikMailerBundle configuration.',
                 $lang
